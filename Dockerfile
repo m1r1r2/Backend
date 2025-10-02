@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --production
 
-COPY backend/. .
+COPY . .
 
 EXPOSE 8080
 
