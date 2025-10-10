@@ -1,24 +1,21 @@
-# Use official Node.js LTS Alpine image
-FROM node:18-alpine
+FROM node:18-bullseye
 
-# Install build tools for native modules
-RUN apk add --no-cache make gcc g++ python3
+# Install build tools
+RUN apt-get update && apt-get install -y build-essential python3
 
 # Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json first for caching
+# Copy package.json and install dependencies
 COPY package*.json ./
-
-# Install dependencies (swisseph-v2 will build for Linux here)
 RUN npm install --production
 
-# Copy rest of the app code
+# Copy source code
 COPY . .
 
-# Expose port Cloud Run expects
+# Set environment variable for Cloud Run
 ENV PORT=8080
 EXPOSE 8080
 
-# Start the app
+# Start the server
 CMD ["npm", "start"]
